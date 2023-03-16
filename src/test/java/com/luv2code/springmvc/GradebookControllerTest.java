@@ -20,6 +20,7 @@ import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -103,6 +104,30 @@ public class GradebookControllerTest {
         CollegeStudent verifyStudent = studentDao.findByEmailAddress("mail1@test.co");
         System.out.println(verifyStudent);
         assertNotNull(verifyStudent,"Student should be found");
+    }
+
+    @Test
+    public void deleteStudentHttpRequest() throws Exception{
+        assertTrue(studentDao.findById(1).isPresent());
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+                .get("/delete/student/{id}",1))
+                .andExpect(status().isOk()).andReturn();
+
+        ModelAndView mav = mvcResult.getModelAndView();
+        ModelAndViewAssert.assertViewName(mav,"index");
+
+        assertFalse(studentDao.findById(1).isPresent());
+    }
+
+    @Test
+    public void deleteStudentHttpRequestErrorPage() throws Exception{
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+                .get("/delete/student/{id}",0))
+                .andExpect(status().isOk()).andReturn();
+
+        ModelAndView mav = mvcResult.getModelAndView();
+        ModelAndViewAssert.assertViewName(mav,"error");
     }
 
     @AfterEach
