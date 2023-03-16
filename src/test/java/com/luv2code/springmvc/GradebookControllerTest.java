@@ -75,6 +75,10 @@ public class GradebookControllerTest {
         ModelAndViewAssert.assertViewName(mav,"index");
     }
 
+    /**
+     *TODO: fix the verify variable
+     * @throws Exception
+     */
     @Test
     public void createStudentHttpRequest() throws Exception{
         CollegeStudent studentOne = new CollegeStudent("testName1","testLastname1","mail1@test.co");
